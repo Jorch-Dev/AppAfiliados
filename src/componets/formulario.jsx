@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { AppBar, Toolbar, Container, Button, TextField, CssBaseline, Typography, Grid } from '@material-ui/core';
+import { useStyles } from '../assets/useStyles'
+import imagen from '../assets/images/roca.png'
+import { AppBar, Toolbar, Container, Button, TextField, Divider, Typography, Grid, Paper, ScopedCssBaseline } from '@material-ui/core';
 
 export const Formulario = () => {
     const [nombre, setNombre] = useState("")
@@ -9,6 +11,7 @@ export const Formulario = () => {
     const [email, setEmail] = useState("")
     const [error, setError] = useState(null)
     const [lista, setLista] = useState([])
+    const classes = useStyles();
 
     const registrar = (e) => {
         e.preventDefault()
@@ -82,17 +85,23 @@ export const Formulario = () => {
                     <h3>Roca Funnel</h3>
                 </Toolbar>
             </AppBar>
-            <CssBaseline />
-            <Container fixed>
-                <Grid container spacing={3}>
+            <Container maxWidth="md">
+                <Grid container spacing={3} >
                     <Grid item xs={6}>
-                        <p>Logo</p>
+                        <Paper className={classes.paper}>
+                            <p>
+                                <img className={classes.image} src={imagen} />
+                            </p>
+                        </Paper>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography component="div" style={{ backgroundColor: '#ffffff', height: '50vh' }}>
-                            <form onSubmit={(e) => registrar(e)} noValidate autoComplete="off">
+                        <Paper className={classes.paper}>
+                            {/* <Typography component="div" style={{ backgroundColor: '#ffffff', height: '50vh' }}> */}
+                            <Divider />
+                            <form className={classes.root} onSubmit={(e) => registrar(e)} noValidate autoComplete="off">
                                 <div>
                                     <TextField
+                                        className={classes.imput}
                                         requerid={true}
                                         id="standard-name-input"
                                         label="Nombre"
@@ -109,6 +118,7 @@ export const Formulario = () => {
                                         )
                                     }
                                     <TextField
+                                        className={classes.imput}
                                         requerid={true}
                                         id="standard-apellidos-input"
                                         label="Apellidos"
@@ -125,6 +135,7 @@ export const Formulario = () => {
                                         )
                                     }
                                     <TextField
+                                        className={classes.imput}
                                         requerid={true}
                                         id="standard-password-input"
                                         label="Password"
@@ -141,6 +152,7 @@ export const Formulario = () => {
                                         )
                                     }
                                     <TextField
+                                        className={classes.imput}
                                         requerid={true}
                                         id="standard-phone-input"
                                         label="Telefono"
@@ -157,9 +169,10 @@ export const Formulario = () => {
                                         )
                                     }
                                     <TextField
+                                        className={classes.imput}
                                         requerid={true}
                                         id="standard-email-input"
-                                        label="Correo Electronico"
+                                        label="Correo Electrónico"
                                         type="text"
                                         autoComplete="current-email"
                                         onChange={(e) => { escribirEmail(e) }}
@@ -174,11 +187,20 @@ export const Formulario = () => {
                                     }
                                     <Button type="submit" variant="contained" color="primary">Registrarse</Button>
                                 </div>
+
+                                <Divider />
                             </form>
-                        </Typography>
+                            {/* </Typography> */}
+                        </Paper>
                     </Grid>
                 </Grid>
             </Container>
+            <AppBar position="static">
+                <Toolbar>
+                    <h3>Roca Funnel</h3>
+                </Toolbar>
+            </AppBar>
+
         </React.Fragment>
     )
 }
