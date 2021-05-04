@@ -3,17 +3,24 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme) => ({
     root: {
-        flexGrow: 1,
+        '& .MuiFormControl-root': {
+            width: '100%',
+            margin: theme.spacing(1)
+        }
+    },
+    avatar: {
+        backgroundColor: '#fc7700'
     },
     paper: {
-        padding: theme.spacing(2),
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
+        borderRadius: '5',
+        padding: 70,
+        height: '85vh',
+        width: 280,
+        margin: '20px auto',
+        marginRight: '30vh'
     },
-    imput: {
-        padding: theme.spacing(1)
-    },
-    image: {
-        width: '100%',
+    appBar: {
+        backgroundColor: '#4b73f0'
     }
+
 }));
