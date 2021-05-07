@@ -8,19 +8,19 @@ export const useStyles = makeStyles((theme) => ({
             margin: theme.spacing(1)
         }
     },
-    avatar: {
-        backgroundColor: '#fc7700'
-    },
-    paper: {
-        borderRadius: '5',
-        padding: 70,
-        height: '85vh',
-        width: 280,
-        margin: '20px auto',
-        marginRight: '30vh'
+    contenedor: {
+        padding: theme.spacing(2),
     },
     appBar: {
-        backgroundColor: '#4b73f0'
+        backgroundColor: '#1946bb'
+    },
+    paper: {
+        borderRadius: '5vh',
+        padding: 70,
+        height: '100vh',
+        width: 270,
+        margin: '30px auto',
     }
+
 
 }));

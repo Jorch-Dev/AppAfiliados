@@ -2,37 +2,52 @@ import React from 'react'
 import { urlApi } from './urlApi'
 import Axios from 'axios'
 
-export default function addUser(obj) {
+export default async function addUser(obj) {
 
     let url = urlApi + "v1/afiliados";
-    console.log(obj)
-    console.log(url)
 
-         Axios.post(url, {
+        await Axios.post(url, {
             "nombre": obj.name,
             "apellidoPaterno": obj.apellidoPaterno,
             "apellidoMaterno": obj.apellidoMaterno,            
             "telefono": obj.telefono,
             "email": obj.email,
             "password": obj.pasword,
-            "enlace":`/${obj.telefono}`
+            "enlace":`/${obj.telefono}`,
+            "public_id":`${obj.telefono}/avatar`
+        }).then(response => {
+            console.log(response.data);
+            if (response.status === 201) {
+                localStorage.setItem("Enlace", `${response.data.afiliado.enlace}`)
+                localStorage.setItem("Token", `${response.data.token}`)
+    
+                let urlCloud = response.data.postImagen.urlCloud;
+                console.log(obj.image[0])
+                let formData = new FormData();
+                formData.append("file", obj.image[0]);
+                formData.append("api_key", response.data.postImagen.api_key);
+                formData.append("public_id", `${obj.telefono}/avatar`);
+                formData.append("timestamp", response.data.postImagen.timestamp);
+                formData.append("signature", response.data.postImagen.signature);
+    
+                Axios.post(urlCloud, formData)
+                        .then(response => {
+                            console.log(response);
+                                
+                        })
+                        .catch(error => {
+                            console.log("Error: " + error)
+                        })
+                    }
+                
         })
-            .then(response => {
-                console.log(response.data);
-                if (response.status === 201) {
-                    localStorage.setItem("Exito", `Usuario creado con exito, su enlace es ${response.data.enlace}`)
-                    //localStorage.setItem("Token", `${response.token}`)
-                } else {
-                    console.log("Entre en else")
-                }
-            })
-            .catch(error => {
-                console.log("Error: " + error)
-            })
+        .catch(function (error)  {
+            if (error.response.status === 400) {
+                localStorage.setItem("Error", JSON.stringify(`${error.response.data.error.msg} ${error.response.data.error.campo}`))
+              } 
+        })
 }
 
-export const constante = () => {
-    const result = localStorage.getItem("Exito")
-    console.log(result)
-    return (result)
+export async function errores() {
+    return await localStorage.getItem("Error")  
 }
