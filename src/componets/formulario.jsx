@@ -6,8 +6,11 @@ import { Alert } from '@material-ui/lab'
 import Dropzone from 'react-dropzone';
 import addUser, { errores } from '../services/addUser'
 import Logo from '../assets/images/roca.png'
+import { login } from '../redux/userSlice'
+import { useDispatch } from "react-redux"
 
 export function Formulario() {
+    const dispatch = useDispatch();
     const [nombre, setNombre] = useState("")
     const [apellidoP, setApellidoP] = useState("")
     const [apellidoM, setApellidoM] = useState("")
@@ -74,7 +77,6 @@ export function Formulario() {
             seterrorEmail("El formato del correo electrónico es incorrecto")
             return;
         }
-        //const image = document.getElementById("standard-photo-input").files[0]
         const objUser = {
             name: nombre,
             apellidoPaterno: apellidoP,
@@ -104,6 +106,17 @@ export function Formulario() {
         setErrorSVDR(null)
 
         localStorage.clear();
+        dispatch(
+            login({
+                name: nombre,
+                apellidoPaterno: apellidoP,
+                apellidoMaterno: apellidoM,
+                pasword: password,
+                telefono: phone,
+                email: email,
+                loggedIn: true,
+            })
+        )
     }
 
     const escribirNombre = (e) => {
@@ -144,7 +157,7 @@ export function Formulario() {
         <React.Fragment>
             <AppBar position="static" className={classes.appBar}>
                 <Toolbar>
-                    <h3>Roca Funnel</h3>
+                    <h3>Roca Funnels</h3>
                 </Toolbar>
             </AppBar>
             <Container className={classes.contenedor}>

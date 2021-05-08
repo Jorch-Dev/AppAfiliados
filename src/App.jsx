@@ -1,10 +1,15 @@
+import React from 'react';
 import { Formulario } from './componets/formulario';
+import { useSelector } from "react-redux"
+import { selectUser } from "./redux/userSlice"
+import Perfil from './componets/perfil'
 
 function App() {
+  const user = useSelector(selectUser);
   return (
-    <div>
-      <Formulario />
-    </div>
+    <React.Fragment>
+      { user ? <Perfil /> : <Formulario />}
+    </React.Fragment>
   );
 }
 
