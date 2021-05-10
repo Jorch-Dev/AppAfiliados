@@ -20,7 +20,18 @@ export const useStyles = makeStyles((theme) => ({
         height: '100vh',
         width: 270,
         margin: '30px auto',
-    }
-
-
+    },
+    large: {
+        width: theme.spacing(25),
+        height: theme.spacing(25),
+    },
+    box: {
+        backgroundColor: "#1946bb",
+        padding: 60,
+        margin: '5px auto',
+    },
+    tab: {
+        flexGrow: 1,
+        backgroundColor: theme.palette.background.paper,
+    },
 }));

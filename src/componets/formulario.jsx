@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useStyles } from '../assets/useStyles'
-import { AppBar, Toolbar, Container, Button, TextField, Avatar, Grid, Paper } from '@material-ui/core';
+import { AppBar, Toolbar, Container, Button, TextField, Avatar, Grid, Paper, Typography } from '@material-ui/core';
 import { PersonAdd } from '@material-ui/icons';
 import { Alert } from '@material-ui/lab'
 import Dropzone from 'react-dropzone';
@@ -87,14 +87,14 @@ export function Formulario() {
             image: photo
         }
         console.log(objUser)
-        await addUser(objUser)
+        // await addUser(objUser)
 
-        let msgError = await errores()
-        if (msgError != null) {
-            setErrorSVDR(msgError)
-            return
-        }
-        console.log(errorSVDR)
+        // let msgError = await errores()
+        // if (msgError != null) {
+        //     setErrorSVDR(msgError)
+        //     return
+        // }
+        // console.log(errorSVDR)
 
         setNombre("")
         setApellidoP("")
@@ -157,7 +157,9 @@ export function Formulario() {
         <React.Fragment>
             <AppBar position="static" className={classes.appBar}>
                 <Toolbar>
-                    <h3>Roca Funnels</h3>
+                    <Typography variant="h6" style={{ flexGrow: 1 }}>
+                        Roca Funnels
+                    </Typography>
                 </Toolbar>
             </AppBar>
             <Container className={classes.contenedor}>

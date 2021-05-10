@@ -2,7 +2,7 @@ import React from 'react';
 import { Formulario } from './componets/formulario';
 import { useSelector } from "react-redux"
 import { selectUser } from "./redux/userSlice"
-import Perfil from './componets/perfil'
+import { Perfil } from './componets/perfil'
 
 function App() {
   const user = useSelector(selectUser);
