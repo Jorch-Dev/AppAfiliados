@@ -15,11 +15,28 @@ export const useStyles = makeStyles((theme) => ({
         backgroundColor: '#1946bb'
     },
     paper: {
-        borderRadius: '5vh',
+        '--color-1': '#4b73f0',
+        '--color-2': '#ffffff',
+        background: `
+      linear-gradient(
+        170deg,
+        var(--color-1),
+        var(--color-2) 80%
+      )
+    `,
+        borderRadius: '7vh',
         padding: 70,
-        height: '100vh',
+        height: '110vh',
         width: 270,
         margin: '30px auto',
+        color: "#ffffff"
+    },
+    paper1: {
+        borderRadius: '7vh',
+        padding: 70,
+        height: '110vh',
+        width: 270,
+        margin: '30px auto'
     },
     large: {
         width: theme.spacing(25),

@@ -1,19 +1,75 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { logout } from '../redux/userSlice'
 import { useDispatch } from "react-redux"
 import { AppBar, Toolbar, Button, Typography, Container, Avatar, Box, Grid, Tabs, Tab, TextField } from '@material-ui/core';
 import { useStyles } from '../assets/useStyles'
-import { obtenerDatos } from '../services/getUser'
-import Dropzone from 'react-dropzone';
+import { obtenerDatos, getId } from '../services/getUser'
+import { useDropzone } from 'react-dropzone';
 import { Alert } from '@material-ui/lab'
 
 
 export function Perfil() {
-    localStorage.setItem("Id", '66')
+    let id = getId()
+    console.log(id)
     const classes = useStyles();
     const [value, setValue] = useState(0);
-    const [photo, setPhoto] = useState([])
     const [succes, setSucces] = useState(null)
+    //#region Dropzone
+    const thumbsContainer = {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        marginTop: 16
+    };
+
+    const thumb = {
+        display: 'inline-flex',
+        borderRadius: 2,
+        border: '1px solid #eaeaea',
+        marginBottom: 8,
+        marginRight: 8,
+        width: 100,
+        height: 100,
+        padding: 4,
+        boxSizing: 'border-box'
+    };
+
+    const thumbInner = {
+        display: 'flex',
+        minWidth: 0,
+        overflow: 'hidden'
+    };
+
+    const img = {
+        display: 'block',
+        width: 'auto',
+        height: '100%'
+    };
+    const [files, setFiles] = useState([]);
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: 'image/jpeg, image/png',
+        onDrop: acceptedFiles => {
+            setFiles(acceptedFiles.map(file => Object.assign(file, {
+                preview: URL.createObjectURL(file)
+            })));
+        }
+    });
+
+    const thumbs = files.map(file => (
+        <div style={thumb} key={file.name}>
+            <div style={thumbInner}>
+                <img
+                    src={file.preview}
+                    style={img}
+                />
+            </div>
+        </div>
+    ));
+
+    useEffect(() => () => {
+        files.forEach(file => URL.revokeObjectURL(file.preview));
+    }, [files]);
+    //#endregion
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -31,7 +87,7 @@ export function Perfil() {
         dispatch(logout())
     }
 
-    obtenerDatos()
+    obtenerDatos(id)
     const data = JSON.parse(localStorage.getItem("datos"))
     console.log(data)
     let date = (new Date(data.createdAt)).toString();
@@ -62,7 +118,7 @@ export function Perfil() {
             <AppBar position="static" className={classes.appBar}>
                 <Toolbar>
                     <Typography variant="h6" style={{ flexGrow: 1 }}>
-                        Roca Funnels
+                        RocaFunnels
                     </Typography>
                     <Button color="inherit" onClick={(e) => cerrarS(e)}>cerrar sesión</Button>
                 </Toolbar>
@@ -90,7 +146,7 @@ export function Perfil() {
                             </Typography>
                             <hr></hr>
                             <Typography variant="h8" style={{ color: '#ffffff' }}>
-                                Correo Electrónico: {data.email}
+                                Correo electrónico: {data.email}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -100,7 +156,6 @@ export function Perfil() {
                 <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
                     <Tab label="Información Personal" {...a11yProps(0)} />
                     <Tab label="Editar Información" {...a11yProps(1)} />
-                    {/* <Tab label="Item Three" {...a11yProps(2)} /> */}
                 </Tabs>
                 <TabPanel value={value} index={0}>
                     <Grid container spacing={3}>
@@ -117,10 +172,10 @@ export function Perfil() {
                         <Grid item xs={6}>
                             <TextField
                                 disabled
-                                id="standard-apellidoP-input"
-                                label="Apellido Paterno"
+                                id="standard-apellidoPaterno-input"
+                                label="Apellido paterno"
                                 type="text"
-                                autoComplete="current-apellidosP"
+                                autoComplete="current-apellidoPaterno"
                                 value={data.apellidoPaterno}
                             />
                         </Grid>
@@ -128,10 +183,10 @@ export function Perfil() {
                             <TextField
                                 disabled
                                 className={classes.imput}
-                                id="standard-apellidoM-input"
-                                label="Apellido Materno"
+                                id="standard-apellidoMaterno-input"
+                                label="Apellido materno"
                                 type="text"
-                                autoComplete="current-apellidosM"
+                                autoComplete="current-apellidoMaterno"
                                 value={data.apellidoMaterno}
                             />
                         </Grid>
@@ -139,18 +194,17 @@ export function Perfil() {
                             <TextField
                                 disabled
                                 id="standard-phone-input"
-                                label="Telefono"
+                                label="Teléfono"
                                 type="text"
                                 autoComplete="current-phone"
                                 value={data.telefono}
-                                helperText="10 digitos"
                             />
                         </Grid>
                         <Grid item xs={6}>
                             <TextField
                                 disabled
                                 id="standard-email-input"
-                                label="Correo Electrónico"
+                                label="Correo electrónico"
                                 type="email"
                                 autoComplete="current-email"
                                 value={data.email}
@@ -184,7 +238,7 @@ export function Perfil() {
                             <TextField
                                 required
                                 id="standard-apellidoP-input"
-                                label="Apellido Paterno"
+                                label="Apellido paterno"
                                 type="text"
                                 autoComplete="current-apellidosP"
                                 value={data.apellidoPaterno}
@@ -194,7 +248,7 @@ export function Perfil() {
                             <TextField
                                 className={classes.imput}
                                 id="standard-apellidoM-input"
-                                label="Apellido Materno"
+                                label="Apellido materno"
                                 type="text"
                                 autoComplete="current-apellidosM"
                                 value={data.apellidoMaterno}
@@ -204,7 +258,7 @@ export function Perfil() {
                             <TextField
                                 required
                                 id="standard-phone-input"
-                                label="Telefono"
+                                label="Teléfono"
                                 type="text"
                                 autoComplete="current-phone"
                                 value={data.telefono}
@@ -215,29 +269,22 @@ export function Perfil() {
                             <TextField
                                 required
                                 id="standard-email-input"
-                                label="Correo Electrónico"
+                                label="Correo electrónico"
                                 type="email"
                                 autoComplete="current-email"
                                 value={data.email}
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <Dropzone onDrop={files => setPhoto(files)}>
-                                {({ getRootProps, getInputProps }) => (
-                                    <div className="container">
-                                        <div
-                                            {...getRootProps({
-                                                className: 'dropzone',
-                                                accept: 'image/jpeg, image/png',
-                                                onDrop: event => event.stopPropagation()
-                                            })}
-                                        >
-                                            <input {...getInputProps()} />
-                                            <p>Arrastra y suelta aqui tu imagen de perfil o clic para seleccionar</p>
-                                        </div>
-                                    </div>
-                                )}
-                            </Dropzone>
+                            <section className="container">
+                                <div {...getRootProps({ className: 'dropzone' })}>
+                                    <input {...getInputProps()} />
+                                    <p>Arrastra y suelta tu avatar aquí o clic para seleccionar</p>
+                                </div>
+                                <aside style={thumbsContainer}>
+                                    {thumbs}
+                                </aside>
+                            </section>
                         </Grid>
                         <Grid align='center'>
                             <Button style={{ backgroundColor: "#fc7700", color: '#ffffff' }} type="submit" variant="contained" size="large" >Actualizar</Button>
@@ -256,7 +303,7 @@ export function Perfil() {
             <AppBar position="static" className={classes.appBar}>
                 <Toolbar>
                     <Typography variant="h6" style={{ flexGrow: 1 }}>
-                        Roca Funnels
+                        RocaFunnels
                     </Typography>
                 </Toolbar>
             </AppBar>

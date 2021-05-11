@@ -2,7 +2,7 @@ import React from 'react'
 import { urlApi, urlImg } from './urlApi'
 import Axios from 'axios'
 
-export default async function addUser(obj) {
+export default function addUser(obj) {
 
     let url = urlApi + "v1/afiliados";
     let urlCloud = urlImg
@@ -11,7 +11,7 @@ export default async function addUser(obj) {
     formData.append("file", obj.image[0]);
     formData.append("upload_preset", `plantilla-afiliado`);
 
-            Axios.post(urlCloud, formData)
+         Axios.post(urlCloud, formData)
             .then(response => {
                 console.log(response.data);
                     Axios.post(url, {
@@ -43,6 +43,6 @@ export default async function addUser(obj) {
             })
         }      
 
-export async function errores() {
-    return await localStorage.getItem("Error")  
+export function errores() {
+    return localStorage.getItem("Error")  
 }
