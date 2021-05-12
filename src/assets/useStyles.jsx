@@ -9,7 +9,7 @@ export const useStyles = makeStyles((theme) => ({
         }
     },
     contenedor: {
-        padding: theme.spacing(2),
+        margin: '30px auto'
     },
     appBar: {
         backgroundColor: '#1946bb'
@@ -25,18 +25,16 @@ export const useStyles = makeStyles((theme) => ({
       )
     `,
         borderRadius: '7vh',
-        padding: 70,
-        height: '110vh',
+        padding: 50,
+        height: '80vh',
         width: 270,
-        margin: '30px auto',
         color: "#ffffff"
     },
     paper1: {
         borderRadius: '7vh',
-        padding: 70,
+        padding: 50,
         height: '110vh',
-        width: 270,
-        margin: '30px auto'
+        width: 270
     },
     large: {
         width: theme.spacing(25),
@@ -45,10 +43,19 @@ export const useStyles = makeStyles((theme) => ({
     box: {
         backgroundColor: "#1946bb",
         padding: 60,
+        margin: '5px auto'
+    },
+    box1: {
+        backgroundColor: "#1946bb",
+        padding: 60,
         margin: '5px auto',
+        height: '110vh',
+        borderRadius: '5vh',
     },
     tab: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: theme.palette.background.paper
     },
+    gridTab: {
+        margin: '5px auto'
+    }
 }));

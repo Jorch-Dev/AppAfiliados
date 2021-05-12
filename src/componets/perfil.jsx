@@ -123,7 +123,6 @@ export function Perfil() {
                     <Button color="inherit" onClick={(e) => cerrarS(e)}>cerrar sesión</Button>
                 </Toolbar>
             </AppBar>
-
             <Box color="text.primary" className={classes.box}>
                 <Container maxWidth="md">
                     <Grid container spacing={3}>
@@ -140,7 +139,6 @@ export function Perfil() {
                             </Typography>
                         </Grid>
                         <Grid item xs={3}>
-
                             <Typography variant="h8" style={{ color: '#ffffff' }}>
                                 Teléfono: {data.telefono}
                             </Typography>
@@ -152,7 +150,7 @@ export function Perfil() {
                     </Grid>
                 </Container>
             </Box>
-            <Container maxWidth="sm">
+            <Container maxWidth="md">
                 <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
                     <Tab label="Información Personal" {...a11yProps(0)} />
                     <Tab label="Editar Información" {...a11yProps(1)} />
@@ -307,8 +305,6 @@ export function Perfil() {
                     </Typography>
                 </Toolbar>
             </AppBar>
-
-
         </React.Fragment>
     )
 }

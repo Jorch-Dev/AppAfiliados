@@ -17,8 +17,8 @@ export default function loginService(obj) {
         }              
     })
     .catch(function (error)  {
-        // if (error.response.status === 400) {
-        //     localStorage.setItem("Error", JSON.stringify(`${error.response.data.error.msg} ${error.response.data.error.campo}`))
-        // } 
+        if (error.response.status === 400) {
+            localStorage.setItem("Error", JSON.stringify(`${error.response.data.error.msg} ${error.response.data.error.campo}`))
+        } 
     })
 }

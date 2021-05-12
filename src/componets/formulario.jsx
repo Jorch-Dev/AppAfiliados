@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useStyles } from '../assets/useStyles'
-import { AppBar, Toolbar, Container, Button, TextField, Avatar, Grid, Paper, Typography } from '@material-ui/core';
+import { AppBar, Toolbar, Container, Button, TextField, Avatar, Grid, Paper, Typography, Box, Tabs, Tab } from '@material-ui/core';
 import { PersonAdd } from '@material-ui/icons';
-import { Alert } from '@material-ui/lab'
+import { Alert, TimelineSeparator } from '@material-ui/lab'
 import { useDropzone } from 'react-dropzone';
 import addUser, { errores } from '../services/addUser'
 import LogIn from '../componets/logIn'
@@ -28,6 +28,38 @@ export function Formulario() {
     const [phoneError, setPhoneerror] = useState(null)
     const [errorSVDR, setErrorSVDR] = useState(null)
     const classes = useStyles();
+    //#region tabs
+    const [value, setValue] = useState(0);
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
+    function a11yProps(index) {
+        return {
+            id: `simple-tab-${index}`,
+            'aria-controls': `simple-tabpanel-${index}`,
+        };
+    }
+    function TabPanel(props) {
+        const { children, value, index, ...other } = props;
+
+        return (
+            <div
+                role="tabpanel"
+                hidden={value !== index}
+                id={`simple-tabpanel-${index}`}
+                aria-labelledby={`simple-tab-${index}`}
+                {...other}
+            >
+                {value === index && (
+                    <Box p={3}>
+                        <Typography>{children}</Typography>
+                    </Box>
+                )}
+            </div>
+        );
+    }
+    //#endregion
 
     //#region Dropzone
     const thumbsContainer = {
@@ -225,146 +257,163 @@ export function Formulario() {
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <Container className={classes.contenedor}>
-                <Grid container spacing={2}>
+            <Container maxWidth="md">
+                <Grid container className={classes.contenedor} spacing={2}>
                     <Grid item xs={6}>
-                        <Paper elevation={20} className={classes.paper}>
-                            <LogIn />
-                        </Paper>
+                        <Box color="text.primary" className={classes.box1}>
+                            <Grid>
+                                <h1 style={{ color: '#ffffff' }}>ROCA!!!</h1>
+                            </Grid>
+                            <Grid>
+                                <p style={{ color: '#ffffff' }}>"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."</p>
+                            </Grid>
+                            <Grid>
+                                <p style={{ color: '#ffffff' }}>"There is no one who loves pain itself, who seeks after it and wants to have it, simply because it is pain..."</p>
+                            </Grid>
+                        </Box>
                     </Grid>
-                    <Grid item xs={6}>
-                        <Paper elevation={20} className={classes.paper1}>
-                            <Grid item xs={12} align='center'>
-                                <Avatar style={{ backgroundColor: "#4b73f0" }}><PersonAdd /></Avatar>
+                    <Grid item xs={6} className={classes.gridTab}>
+                        <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
+                            <Tab label="Login" {...a11yProps(0)} />
+                            <Tab label="Registro" {...a11yProps(1)} />
+                        </Tabs>
+                        <TabPanel value={value} index={0}>
+                            <Grid container spacing={3}>
+                                <Paper elevation={20} className={classes.paper}>
+                                    <LogIn />
+                                </Paper>
                             </Grid>
-                            <Grid item xs={12} align='center'>
-                                <Typography variant="h3" style={{ color: "#4b73f0" }}>
-                                    REGISTRO
+                        </TabPanel>
+                        <TabPanel value={value} index={1}>
+                            <Grid container spacing={3}>
+                                <Paper elevation={20} className={classes.paper1}>
+                                    <Grid item xs={12} align='center'>
+                                        <Avatar style={{ backgroundColor: "#4b73f0" }}><PersonAdd /></Avatar>
+                                    </Grid>
+                                    <Grid item xs={12} align='center'>
+                                        <Typography variant="h3" style={{ color: "#4b73f0" }}>
+                                            REGISTRO
                                 </Typography>
-                            </Grid>
-                            {
-                                errorSVDR != null ? (
-                                    <Alert severity="error">{errorSVDR}!</Alert>) : (<></>)
-                            }
-                            <form className={classes.root} onSubmit={(e) => registrar(e)}>
-                                <TextField
-                                    id="standard-name-input"
-                                    required
-                                    label="Nombre"
-                                    type="text"
-                                    autoComplete="current-name"
-                                    onChange={(e) => { escribirNombre(e) }}
-                                    value={nombre}
-                                    style={{ color: '#4b73f0' }}
-                                />
-                                {
-                                    alfanumerico != null ?
-                                        (<Alert severity="error">{alfanumerico}!</Alert>)
-                                        : (<></>)
-                                }
-                                <TextField
-                                    required
-                                    id="standard-apellidoP-input"
-                                    label="Apellido paterno"
-                                    type="text"
-                                    autoComplete="current-apellidosP"
-                                    onChange={(e) => { escribirApellidoP(e) }}
-                                    value={apellidoP}
-                                />
-                                {
-                                    apellidoPError != null ?
-                                        (<Alert severity="error">{apellidoPError}!</Alert>)
-                                        : (<></>)
-                                }
-                                <TextField
-                                    className={classes.imput}
-                                    id="standard-apellidoM-input"
-                                    label="Apellido materno"
-                                    type="text"
-                                    autoComplete="current-apellidosM"
-                                    onChange={(e) => { escribirApellidoM(e) }}
-                                    value={apellidoM}
-                                />
-                                {
-                                    apellidoMError != null ?
-                                        (<Alert severity="error">{apellidoMError}!</Alert>)
-                                        : (<></>)
-                                }
-                                <TextField
-                                    required
-                                    id="standard-password-input"
-                                    label="Password"
-                                    type="password"
-                                    autoComplete="current-password"
-                                    onChange={(e) => { escribirPassword(e) }}
-                                    value={password}
-                                    inputProps={{ maxLength: 8 }}
-                                    helperText="Debe contener mínimo 8 posiciones considerando al menos una mayúscula, un carácter especial y un número"
-                                />
-                                {
-                                    passwordError != null ?
-                                        (<Alert severity="error">{passwordError}!</Alert>)
-                                        : (<></>)
-                                }
-                                <TextField
-                                    required
-                                    id="standard-phone-input"
-                                    label="Teléfono"
-                                    type="text"
-                                    autoComplete="current-phone"
-                                    onChange={(e) => { escribirPhone(e) }}
-                                    value={phone}
-                                    helperText="10 dígitos"
-                                    inputProps={{ maxLength: 10 }}
-                                />
-                                {
-                                    phoneError != null ?
-                                        (<Alert severity="error">{phoneError}!</Alert>)
-                                        : (<></>)
-                                }
-                                <TextField
-                                    required
-                                    id="standard-email-input"
-                                    label="Correo Electrónico"
-                                    type="email"
-                                    autoComplete="current-email"
-                                    onChange={(e) => { escribirEmail(e) }}
-                                    value={email}
-                                />
-                                {
-                                    errorEmail != null ? (
-                                        <Alert severity="error">{errorEmail}!</Alert>) : (<></>)
-                                }
-                                <section className="container">
-                                    <div {...getRootProps({ className: 'dropzone' })}>
-                                        <input {...getInputProps()} />
-                                        <p>Arrastra y suelta tu avatar aquí o clic para seleccionar</p>
-                                    </div>
-                                    <aside style={thumbsContainer}>
-                                        {thumbs}
-                                    </aside>
-                                </section>
-                                <Grid align='center'>
-                                    <Button style={{ backgroundColor: "#fc7700", color: '#ffffff' }} type="submit" variant="contained" size="large" >Regístrate</Button>
+                                    </Grid>
                                     {
-                                        succes != null ? (
-                                            <Alert severity="success">{succes}!</Alert>
-                                        ) : (
-                                            <></>
-                                        )
+                                        errorSVDR != null ? (
+                                            <Alert severity="error">{errorSVDR}!</Alert>) : (<></>)
                                     }
-                                </Grid>
-                            </form>
-                        </Paper>
+                                    <form className={classes.root} onSubmit={(e) => registrar(e)}>
+                                        <TextField
+                                            id="standard-name-input"
+                                            required
+                                            label="Nombre"
+                                            type="text"
+                                            autoComplete="current-name"
+                                            onChange={(e) => { escribirNombre(e) }}
+                                            value={nombre}
+                                            style={{ color: '#4b73f0' }}
+                                        />
+                                        {
+                                            alfanumerico != null ?
+                                                (<Alert severity="error">{alfanumerico}!</Alert>)
+                                                : (<></>)
+                                        }
+                                        <TextField
+                                            required
+                                            id="standard-apellidoP-input"
+                                            label="Apellido paterno"
+                                            type="text"
+                                            autoComplete="current-apellidosP"
+                                            onChange={(e) => { escribirApellidoP(e) }}
+                                            value={apellidoP}
+                                        />
+                                        {
+                                            apellidoPError != null ?
+                                                (<Alert severity="error">{apellidoPError}!</Alert>)
+                                                : (<></>)
+                                        }
+                                        <TextField
+                                            className={classes.imput}
+                                            id="standard-apellidoM-input"
+                                            label="Apellido materno"
+                                            type="text"
+                                            autoComplete="current-apellidosM"
+                                            onChange={(e) => { escribirApellidoM(e) }}
+                                            value={apellidoM}
+                                        />
+                                        {
+                                            apellidoMError != null ?
+                                                (<Alert severity="error">{apellidoMError}!</Alert>)
+                                                : (<></>)
+                                        }
+                                        <TextField
+                                            required
+                                            id="standard-password-input"
+                                            label="Password"
+                                            type="password"
+                                            autoComplete="current-password"
+                                            onChange={(e) => { escribirPassword(e) }}
+                                            value={password}
+                                            inputProps={{ maxLength: 8 }}
+                                            helperText="Debe contener mínimo 8 posiciones considerando al menos una mayúscula, un carácter especial y un número"
+                                        />
+                                        {
+                                            passwordError != null ?
+                                                (<Alert severity="error">{passwordError}!</Alert>)
+                                                : (<></>)
+                                        }
+                                        <TextField
+                                            required
+                                            id="standard-phone-input"
+                                            label="Teléfono"
+                                            type="text"
+                                            autoComplete="current-phone"
+                                            onChange={(e) => { escribirPhone(e) }}
+                                            value={phone}
+                                            helperText="10 dígitos"
+                                            inputProps={{ maxLength: 10 }}
+                                        />
+                                        {
+                                            phoneError != null ?
+                                                (<Alert severity="error">{phoneError}!</Alert>)
+                                                : (<></>)
+                                        }
+                                        <TextField
+                                            required
+                                            id="standard-email-input"
+                                            label="Correo Electrónico"
+                                            type="email"
+                                            autoComplete="current-email"
+                                            onChange={(e) => { escribirEmail(e) }}
+                                            value={email}
+                                        />
+                                        {
+                                            errorEmail != null ? (
+                                                <Alert severity="error">{errorEmail}!</Alert>) : (<></>)
+                                        }
+                                        <section className="container">
+                                            <div {...getRootProps({ className: 'dropzone' })}>
+                                                <input {...getInputProps()} />
+                                                <p>Arrastra y suelta tu avatar aquí o clic para seleccionar</p>
+                                            </div>
+                                            <aside style={thumbsContainer}>
+                                                {thumbs}
+                                            </aside>
+                                        </section>
+                                        <div align='center'>
+                                            <Button style={{ backgroundColor: "#fc7700", color: '#ffffff' }} type="submit" variant="contained" size="large" >Regístrate</Button>
+                                            {
+                                                succes != null ? (
+                                                    <Alert severity="success">{succes}!</Alert>
+                                                ) : (
+                                                    <></>
+                                                )
+                                            }
+                                        </div>
+                                    </form>
+                                </Paper>
+                            </Grid>
+                        </TabPanel>
                     </Grid>
                 </Grid>
             </Container>
-            <AppBar position="static" className={classes.appBar}>
-                <Typography variant="h6">
-                    RocaFunnels
-                </Typography>
-            </AppBar>
-
         </React.Fragment >
     )
 }
