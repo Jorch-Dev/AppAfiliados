@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Logo from '../assets/images/roca.png'
-import { Button, TextField, Grid, Typography } from '@material-ui/core';
+import { Button, TextField, Grid } from '@material-ui/core';
 import { Alert } from '@material-ui/lab'
 import { useStyles } from '../assets/useStyles'
 import loginService from '../services/loginService'
@@ -65,9 +65,7 @@ export default function LogIn() {
                 <img src={Logo} width="50" height="50" />
             </Grid>
             <Grid item xs={12} align='center'>
-                <Typography variant="h3" style={{ color: "#ffffff" }}>
-                    LOGIN
-                                </Typography>
+                <h2 style={{ color: "#ffffff" }}>LOGIN</h2>
             </Grid>
             <form className={classes.root} onSubmit={(e) => acceder(e)} >
                 <TextField

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useStyles } from '../assets/useStyles'
-import { AppBar, Toolbar, Container, Button, TextField, Avatar, Grid, Paper, Typography, Box, Tabs, Tab } from '@material-ui/core';
+import { AppBar, Toolbar, Container, Button, TextField, Avatar, Grid, Paper, Box, Tabs, Tab } from '@material-ui/core';
 import { PersonAdd } from '@material-ui/icons';
-import { Alert, TimelineSeparator } from '@material-ui/lab'
-import { useDropzone } from 'react-dropzone';
+import { Alert } from '@material-ui/lab'
 import addUser, { errores } from '../services/addUser'
 import LogIn from '../componets/logIn'
 import { login } from '../redux/userSlice'
 import { useDispatch } from "react-redux"
+import { DropZone } from '../assets/dropzone'
 
 export function Formulario() {
     const dispatch = useDispatch();
@@ -53,70 +53,12 @@ export function Formulario() {
             >
                 {value === index && (
                     <Box p={3}>
-                        <Typography>{children}</Typography>
+                        {children}
                     </Box>
                 )}
             </div>
         );
     }
-    //#endregion
-
-    //#region Dropzone
-    const thumbsContainer = {
-        display: 'flex',
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        marginTop: 16
-    };
-
-    const thumb = {
-        display: 'inline-flex',
-        borderRadius: 2,
-        border: '1px solid #eaeaea',
-        marginBottom: 8,
-        marginRight: 8,
-        width: 100,
-        height: 100,
-        padding: 4,
-        boxSizing: 'border-box'
-    };
-
-    const thumbInner = {
-        display: 'flex',
-        minWidth: 0,
-        overflow: 'hidden'
-    };
-
-    const img = {
-        display: 'block',
-        width: 'auto',
-        height: '100%'
-    };
-    const [files, setFiles] = useState([]);
-    const { getRootProps, getInputProps } = useDropzone({
-        accept: 'image/jpeg, image/png',
-        onDrop: acceptedFiles => {
-            setFiles(acceptedFiles.map(file => Object.assign(file, {
-                preview: URL.createObjectURL(file)
-            })));
-        }
-    });
-
-    const thumbs = files.map(file => (
-        <div style={thumb} key={file.name}>
-            <div style={thumbInner}>
-                <img
-                    src={file.preview}
-                    style={img}
-                />
-            </div>
-        </div>
-    ));
-
-    useEffect(() => () => {
-        // Make sure to revoke the data uris to avoid memory leaks
-        files.forEach(file => URL.revokeObjectURL(file.preview));
-    }, [files]);
     //#endregion
 
     const registrar = (e) => {
@@ -166,6 +108,7 @@ export function Formulario() {
             seterrorEmail("El formato del correo electrónico es incorrecto")
             return;
         }
+        const files = JSON.parse(localStorage.getItem("imagen"))
         console.log(files)
         const objUser = {
             name: nombre,
@@ -177,16 +120,14 @@ export function Formulario() {
             image: files
         }
         console.log(objUser)
-        addUser(objUser)
+        //addUser(objUser)
 
-        function erroresServidor() {
-            let msgError = errores()
-            if (msgError != null) {
-                setErrorSVDR(msgError)
-            }
-            console.log(errorSVDR)
-            return
-        }
+        // let msgError = errores()
+        // if (msgError != null) {
+        //     setErrorSVDR(msgError)
+        //     return
+        // }
+        // console.log(errorSVDR)
 
 
         setNombre("")
@@ -198,7 +139,6 @@ export function Formulario() {
         setPhoto([])
         setErrorSVDR(null)
 
-        localStorage.clear();
         dispatch(
             login({
                 name: nombre,
@@ -210,6 +150,8 @@ export function Formulario() {
                 loggedIn: true,
             })
         )
+        localStorage.clear();
+
         //#endregion 
 
     }
@@ -252,9 +194,7 @@ export function Formulario() {
         <React.Fragment>
             <AppBar position="static" className={classes.appBar}>
                 <Toolbar>
-                    <Typography variant="h6">
-                        RocaFunnels
-                    </Typography>
+                    <h3 variant="h6"> RocaFunnels</h3>
                 </Toolbar>
             </AppBar>
             <Container maxWidth="md">
@@ -291,9 +231,7 @@ export function Formulario() {
                                         <Avatar style={{ backgroundColor: "#4b73f0" }}><PersonAdd /></Avatar>
                                     </Grid>
                                     <Grid item xs={12} align='center'>
-                                        <Typography variant="h3" style={{ color: "#4b73f0" }}>
-                                            REGISTRO
-                                </Typography>
+                                        <h2 style={{ color: "#4b73f0" }}>REGISTRO</h2>
                                     </Grid>
                                     {
                                         errorSVDR != null ? (
@@ -301,11 +239,9 @@ export function Formulario() {
                                     }
                                     <form className={classes.root} onSubmit={(e) => registrar(e)}>
                                         <TextField
-                                            id="standard-name-input"
                                             required
+                                            id="name-input"
                                             label="Nombre"
-                                            type="text"
-                                            autoComplete="current-name"
                                             onChange={(e) => { escribirNombre(e) }}
                                             value={nombre}
                                             style={{ color: '#4b73f0' }}
@@ -317,10 +253,8 @@ export function Formulario() {
                                         }
                                         <TextField
                                             required
-                                            id="standard-apellidoP-input"
+                                            id="apellidoP-input"
                                             label="Apellido paterno"
-                                            type="text"
-                                            autoComplete="current-apellidosP"
                                             onChange={(e) => { escribirApellidoP(e) }}
                                             value={apellidoP}
                                         />
@@ -330,11 +264,8 @@ export function Formulario() {
                                                 : (<></>)
                                         }
                                         <TextField
-                                            className={classes.imput}
-                                            id="standard-apellidoM-input"
+                                            id="apellidoM-input"
                                             label="Apellido materno"
-                                            type="text"
-                                            autoComplete="current-apellidosM"
                                             onChange={(e) => { escribirApellidoM(e) }}
                                             value={apellidoM}
                                         />
@@ -345,10 +276,9 @@ export function Formulario() {
                                         }
                                         <TextField
                                             required
-                                            id="standard-password-input"
+                                            id="password-input"
                                             label="Password"
                                             type="password"
-                                            autoComplete="current-password"
                                             onChange={(e) => { escribirPassword(e) }}
                                             value={password}
                                             inputProps={{ maxLength: 8 }}
@@ -361,10 +291,8 @@ export function Formulario() {
                                         }
                                         <TextField
                                             required
-                                            id="standard-phone-input"
+                                            id="phone-input"
                                             label="Teléfono"
-                                            type="text"
-                                            autoComplete="current-phone"
                                             onChange={(e) => { escribirPhone(e) }}
                                             value={phone}
                                             helperText="10 dígitos"
@@ -377,10 +305,9 @@ export function Formulario() {
                                         }
                                         <TextField
                                             required
-                                            id="standard-email-input"
+                                            id="email-input"
                                             label="Correo Electrónico"
                                             type="email"
-                                            autoComplete="current-email"
                                             onChange={(e) => { escribirEmail(e) }}
                                             value={email}
                                         />
@@ -388,15 +315,7 @@ export function Formulario() {
                                             errorEmail != null ? (
                                                 <Alert severity="error">{errorEmail}!</Alert>) : (<></>)
                                         }
-                                        <section className="container">
-                                            <div {...getRootProps({ className: 'dropzone' })}>
-                                                <input {...getInputProps()} />
-                                                <p>Arrastra y suelta tu avatar aquí o clic para seleccionar</p>
-                                            </div>
-                                            <aside style={thumbsContainer}>
-                                                {thumbs}
-                                            </aside>
-                                        </section>
+                                        <DropZone />
                                         <div align='center'>
                                             <Button style={{ backgroundColor: "#fc7700", color: '#ffffff' }} type="submit" variant="contained" size="large" >Regístrate</Button>
                                             {

@@ -33,7 +33,7 @@ export const useStyles = makeStyles((theme) => ({
     paper1: {
         borderRadius: '7vh',
         padding: 50,
-        height: '110vh',
+        height: '120vh',
         width: 270
     },
     large: {
